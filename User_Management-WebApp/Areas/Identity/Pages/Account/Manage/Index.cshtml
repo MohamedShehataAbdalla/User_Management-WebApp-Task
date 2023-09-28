@@ -1,0 +1,93 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    ViewData["ParentLayout"] = Layout;
+    Layout = "_Layout.cshtml";
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<form id="profile-form" method="post" enctype="multipart/form-data">
+<div class="row">
+    <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.First_Name" class="form-control" placeholder="Please enter your First Name." />
+                <label asp-for="Input.First_Name" class="form-label"></label>
+                <span asp-validation-for="Input.First_Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Last_Name" class="form-control" placeholder="Please enter your Last Name." />
+                <label asp-for="Input.Last_Name" class="form-label"></label>
+                <span asp-validation-for="Input.Last_Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                <label asp-for="Username" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="text-center  mb-3">
+                <label asp-for="Input.Gender" class="pe-5"></label>
+                <div class="form-check form-check-inline">
+                    <input type="radio" asp-for="Input.Gender" class="form-check-input"  value="true" id="male" />
+                    <label for="male" asp-for="Input.Gender" class="form-check-label">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" asp-for="Input.Gender" class="form-check-input"  value="false" id="female" />
+                    <label for="female" asp-for="Input.Gender" class="form-check-label">Female</label>
+                </div>
+                <span asp-validation-for="Input.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="datetime" asp-for="Input.DateOfBirth" class="form-control" aria-required="true" />
+                <label asp-for="Input.DateOfBirth"></label>
+                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group mb-3 text-center">
+            @if(Model.Input.Image != null)
+            {
+                    <img id="profilePicture" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.Image))" class="img-thumbnail" style="height:210px; width:210px;" />
+            }
+            else
+            {
+                if (Model.Input.Gender == true)
+                {
+                    <img id="profilePicture" src="~/img/men.png" class="img-thumbnail" style="height: 210px; width: 210px; " />
+
+                }
+                else
+                {
+                    <img id="profilePicture" src="~/img/women.png" class="img-thumbnail" style="height: 210px; width: 210px; " />
+                }
+            }
+
+            <div class="">
+                <label asp-for="Input.Image" class="form-label"></label>
+                <input asp-for="Input.Image" class="form-control" type="file" accept="image/*"
+                 onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0])" />
+                <span asp-validation-for="Input.Image" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-floating mb-3">
+             <textarea asp-for="Input.Bio" class="form-control" style="height: 100px" placeholder="Please type your Bio."></textarea>
+            <label asp-for="Input.Bio"></label>
+            <span asp-validation-for="Input.Bio" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+    <button id="update-profile-button" type="submit" class="w-25 btn btn-lg btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
