@@ -12,7 +12,7 @@ using User_Management_WebApp.Data;
 namespace User_Management_WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230927203440_SeedRoles")]
+    [Migration("20230930220208_SeedRoles")]
     partial class SeedRoles
     {
         /// <inheritdoc />
@@ -149,7 +149,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 27, 23, 34, 40, 98, DateTimeKind.Local).AddTicks(9855));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 2, 8, 201, DateTimeKind.Local).AddTicks(3960));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -202,7 +202,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 27, 23, 34, 40, 99, DateTimeKind.Local).AddTicks(2865));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 2, 8, 201, DateTimeKind.Local).AddTicks(7227));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -303,7 +303,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 27, 23, 34, 40, 99, DateTimeKind.Local).AddTicks(5808));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 2, 8, 202, DateTimeKind.Local).AddTicks(317));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");

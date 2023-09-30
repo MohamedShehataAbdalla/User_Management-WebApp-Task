@@ -12,8 +12,8 @@ using User_Management_WebApp.Data;
 namespace User_Management_WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230927212328_AssignAdminUserToAllRoles")]
-    partial class AssignAdminUserToAllRoles
+    [Migration("20230930220255_AddAdminUser")]
+    partial class AddAdminUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,7 +149,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 28, 0, 23, 28, 345, DateTimeKind.Local).AddTicks(373));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 2, 54, 813, DateTimeKind.Local).AddTicks(2820));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -202,7 +202,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 28, 0, 23, 28, 345, DateTimeKind.Local).AddTicks(4590));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 2, 54, 813, DateTimeKind.Local).AddTicks(5504));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -303,7 +303,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 28, 0, 23, 28, 346, DateTimeKind.Local).AddTicks(2162));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 2, 54, 813, DateTimeKind.Local).AddTicks(8219));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");

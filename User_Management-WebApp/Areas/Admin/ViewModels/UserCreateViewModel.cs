@@ -2,7 +2,7 @@
 
 namespace User_Management_WebApp.Areas.Admin.ViewModels
 {
-    public class UserViewModel
+    public class UserCreateViewModel
     {
 
         [Display(Name = "Id")]
@@ -64,7 +64,7 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         [Display(Name = "Is Active")]
         public bool Active { get; set; }
 
-        public IEnumerable<string> RolesName { get; set; }
+        public List<RoleListViewModel> Roles { get; set; }
 
     }
 }

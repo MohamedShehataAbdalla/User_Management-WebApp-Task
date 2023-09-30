@@ -146,7 +146,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 28, 0, 23, 28, 345, DateTimeKind.Local).AddTicks(373));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 3, 40, 482, DateTimeKind.Local).AddTicks(9444));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -199,7 +199,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 28, 0, 23, 28, 345, DateTimeKind.Local).AddTicks(4590));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 3, 40, 483, DateTimeKind.Local).AddTicks(2400));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -300,7 +300,7 @@ namespace User_Management_WebApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 9, 28, 0, 23, 28, 346, DateTimeKind.Local).AddTicks(2162));
+                        .HasDefaultValue(new DateTime(2023, 10, 1, 1, 3, 40, 483, DateTimeKind.Local).AddTicks(5316));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");

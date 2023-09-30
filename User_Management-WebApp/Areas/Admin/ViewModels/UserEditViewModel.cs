@@ -2,7 +2,7 @@
 
 namespace User_Management_WebApp.Areas.Admin.ViewModels
 {
-    public class UserViewModel
+    public class UserEditViewModel
     {
 
         [Display(Name = "Id")]
@@ -15,18 +15,6 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = string.Empty;
-
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; } = string.Empty;
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; } = string.Empty;
-
 
 
         [Display(Name = "Phone Number")]
@@ -64,7 +52,6 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         [Display(Name = "Is Active")]
         public bool Active { get; set; }
 
-        public IEnumerable<string> RolesName { get; set; }
 
     }
 }
