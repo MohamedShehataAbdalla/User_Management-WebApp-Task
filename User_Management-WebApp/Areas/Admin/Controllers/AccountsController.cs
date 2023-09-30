@@ -9,11 +9,12 @@ using User_Management_WebApp.Models;
 namespace User_Management_WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class AccountesController : Controller
+    [Route("Admin/[controller]/[action]")]
+    public class AccountsController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        public AccountesController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public AccountsController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
