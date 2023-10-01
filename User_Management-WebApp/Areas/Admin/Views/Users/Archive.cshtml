@@ -9,11 +9,11 @@
 
     <div class="row">
         <div class="col-md-6 justify-content-between">
-            <h2><i class="fa-solid fa-users"></i><span class="text-primary"> @ViewData["Title"]</span></h2>
+            <h2><i class="fa-solid fa-users-rays"></i> <span class="text-primary">@ViewData["Title"] Archive</span></h2>
         </div>
         <div class="col-md-6 text-end">
             <a asp-action="Create" asp-controller="Users" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add New</a>
-            <a asp-action="Archive" asp-controller="Users" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Recycle Bin</a>
+            <a asp-action="Index" class="btn btn-secondary"><i class="fa-solid fa-angle-left"></i> Back to List</a>
         </div>
     </div>
     <hr />
@@ -21,8 +21,9 @@
 
 <div class="content-page">
 
+
     <div class="alert alert-warning @(Model.Any() ? "d-none" : string.Empty)" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> No @ViewData["Title"] Found!
+        <i class="bi bi-exclamation-triangle"></i> No @ViewData["Title"] Archive Found!
     </div>
 
     <table class="table table-striped table-hover @(!Model.Any() ? "d-none" : string.Empty)">
@@ -44,7 +45,7 @@
                     @Html.DisplayNameFor(model => model.Image)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Active)
+                    @Html.DisplayNameFor(model => model.DeletedAt)
                 </th>
                 <th>Action</th>
             </tr>
@@ -84,33 +85,71 @@
                         }
                     </td>
                     <td>
-                        @if (item.Active)
-                        {
-                            <span class="badge rounded-pill bg-success text-bg-success p-1 ps-2 pe-2">Active</span>
-                        }
-                        else
-                        {
-                            <span class="badge rounded-pill bg-danger text-bg-danger p-1 ps-2 pe-2">Desactive</span>
-                        }
+                        @Html.DisplayFor(modelItem => item.DeletedAt)
                     </td>
                     <td>
-                        <a asp-action="ManageRoles" asp-route-id="@item.Id" class="btn btn-sm btn-secondary"><i class="fa-solid fa-gear"></i> Roles</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen"></i> Edit</a>
+                        <a asp-action="Restore" asp-route-id="@item.Id" class="btn btn-sm btn-success"><i class="fa-solid fa-trash-arrow-up"></i> Restore</a>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-binoculars"></i> Details</a>
-                        <a asp-action="SoftDelete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fa-regular fa-trash-can"></i> Delete</a>
+                        <a href="javascript:;" class="btn btn-sm btn-danger js-delete" data-id="@item.Id"><i class="fa-solid fa-trash"></i> Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+
 </div>
-
-
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function () {
+            $('.js-delete').on('click', function () {
+                var btn = $(this);
+
+                bootbox.confirm({
+                    message: 'Are you sure that you need to delete this user?',
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/admin/api/users/delete/?id=' + btn.data('id'),
+                                method: 'DELETE',
+                                success: function () {
+                                    if ($('tbody tr').length === 1)
+                                        $('table').fadeOut(function () {
+                                            this.remove();
+                                            $('.alert').removeClass('d-none');
+                                        });
+
+                                    else
+                                        btn.parents('tr').fadeOut(function () {
+                                            this.remove();
+                                        });
+
+                                    toastr.success('Book deleted');
+
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong!');
+                                },
+                            });
+                        }
+                    }
+                });
+
+            });
+        });
+    </script>
 }
-
-

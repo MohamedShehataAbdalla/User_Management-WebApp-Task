@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using User_Management_WebApp.Models;
 using System.Net.Mail;
-using User_Management_WebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace User_Management_WebApp.Areas.Identity.Pages.Account

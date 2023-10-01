@@ -25,7 +25,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
         // GET: UsersController
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.Where(x => x.DeletedAt == null).ToListAsync();
 
             var userViewModels = users.Select(user => new UserViewModel
             {
@@ -40,6 +40,30 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 Image = user.Image,
                 UserName = user.UserName!,
                 Active = user.Active,
+                RolesName = _userManager.GetRolesAsync(user).Result,
+            }).ToList();
+
+            return View(userViewModels);
+        }
+
+        public async Task<IActionResult> Archive()
+        {
+            var users = await _userManager.Users.Where(x => x.DeletedAt != null).ToListAsync();
+
+            var userViewModels = users.Select(user => new UserViewModel
+            {
+                Id = user.Id,
+                First_Name = user.First_Name,
+                Last_Name = user.Last_Name,
+                Email = user.Email!,
+                PhoneNumber = user.PhoneNumber,
+                Gender = user.Gender,
+                DateOfBirth = user.DateOfBirth,
+                Bio = user.Bio,
+                Image = user.Image,
+                UserName = user.UserName!,
+                Active = user.Active,
+                DeletedAt = user.DeletedAt,
                 RolesName = _userManager.GetRolesAsync(user).Result,
             }).ToList();
 
@@ -66,6 +90,10 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 Image = user.Image,
                 UserName = user.UserName!,
                 Active = user.Active,
+                DeletedAt = user.DeletedAt,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+                CreatedBy = user.CreatedBy,
                 RolesName = _userManager.GetRolesAsync(user).Result,
             };
 
@@ -150,6 +178,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 user.DateOfBirth = model.DateOfBirth;
                 user.Bio = model.Bio;
                 user.Active = model.Active;
+                user.CreatedBy = User.Identity.Name;
 
 
 
@@ -266,6 +295,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 user.DateOfBirth = model.DateOfBirth;
                 user.Bio = model.Bio;
                 user.Active = model.Active;
+                user.UpdatedAt = DateTime.Now;
 
                 var result = await _userManager.UpdateAsync(user);
 
@@ -286,26 +316,157 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
             }
         }
 
-        // GET: UsersController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: UsersController/SoftDelete/5
+        public async Task<ActionResult> SoftDelete(string id)
         {
-            return View();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var viewModel = new UserViewModel
+            {
+                Id = user.Id,
+                First_Name = user.First_Name,
+                Last_Name = user.Last_Name,
+                UserName = user.UserName!,
+            };
+
+            return View(viewModel);
         }
 
-        // POST: UsersController/Delete/5
+        // POST: UsersController/SoftDelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> SoftDelete(string id, UserViewModel model)
         {
             try
             {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                    return NotFound();
+
+                user.DeletedAt = DateTime.Now;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("UserName", error.Description);
+                    }
+                    return View(model);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
+
+        // GET: UsersController/SoftDelete/5
+        public async Task<ActionResult> Restore(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var viewModel = new UserViewModel
+            {
+                Id = user.Id,
+                First_Name = user.First_Name,
+                Last_Name = user.Last_Name,
+                UserName = user.UserName!,
+            };
+
+            return View(viewModel);
+        }
+
+        // POST: UsersController/SoftDelete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Restore(string id, UserViewModel model)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                    return NotFound();
+
+                user.DeletedAt = null;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("UserName", error.Description);
+                    }
+                    return View(model);
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
+        // GET: UsersController/ChangePassword/5
+        public async Task<ActionResult> ChangePassword(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var viewModel = new UserViewModel
+            {
+                Id = user.Id,
+                First_Name = user.First_Name,
+                Last_Name = user.Last_Name,
+                UserName = user.UserName!,
+            };
+
+            return View(viewModel);
+        }
+
+        // POST: UsersController/ChangePassword/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(string id, UserViewModel model)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                    return NotFound();
+
+                user.UpdatedAt = DateTime.Now;
+
+                _userManager.RemovePasswordAsync(user);
+
+                var result = await  _userManager.AddPasswordAsync(user, model.Password);
+
+            if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("UserName", error.Description);
+                    }
+                    return View(model);
+                }
+
+                return RedirectToAction(nameof(Index));
+        }
+            catch
+            {
+                return View(model);
+    }
+}
 
         public async Task<IActionResult> ManageRoles(string id)
         {
@@ -348,6 +509,10 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 if (!userRoles.Any(x => x == role.RoleName) && role.IsSelected)
                     await _userManager.AddToRoleAsync(user, role.RoleName);
             }
+
+            user.UpdatedAt = DateTime.Now;
+
+            await _userManager.UpdateAsync(user);
 
             return RedirectToAction(nameof(Index));
         }
