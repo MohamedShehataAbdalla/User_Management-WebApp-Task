@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Employees";
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Employees</h2>
+
+@if (AuthorizationServies.AuthorizeAsync(User, Permissions.Employee.Create).Result.Succeeded)
+{
+    <a asp-action="Create" class="btn btn-primary">Add New</a>
+}
+@if (AuthorizationServies.AuthorizeAsync(User, Permissions.Employee.Details).Result.Succeeded)
+{
+    <a asp-action="Details" class="btn btn-info">Details</a>
+}
+@if (AuthorizationServies.AuthorizeAsync(User, Permissions.Employee.Edit).Result.Succeeded)
+{
+    <a asp-action="Edit" class="btn btn-warning">Edit</a>
+}
+@if (AuthorizationServies.AuthorizeAsync(User, Permissions.Employee.Delete).Result.Succeeded)
+{
+    <a asp-action="Delete" class="btn btn-danger">Delete</a>
+}
+
+
+

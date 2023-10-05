@@ -29,6 +29,29 @@ namespace User_Management_WebApp.Seeds
 
         }
 
+        public static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        {
+            var adminUser = new ApplicationUser
+            {
+                Email = "admin@domin.com",
+                UserName = "admin",
+                EmailConfirmed = true,
+                First_Name = "admin",
+                Last_Name = "admin",
+                DateOfBirth = DateOnly.Parse("1990-01-01"),
+            };
+
+            var user = await userManager.FindByEmailAsync(adminUser.Email);
+
+            if (user == null)
+            {
+                await userManager.CreateAsync(adminUser, "P@ssword123");
+                await userManager.AddToRolesAsync(adminUser, new List<string> { Roles.Admin, Roles.Guest });
+            }
+
+
+        }
+
         public static async Task SeedSuperAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             var guestUser = new ApplicationUser
@@ -68,8 +91,8 @@ namespace User_Management_WebApp.Seeds
 
             foreach (var permission in allPermissions)
             {
-                if (!allClaims.Any(x => x.Type == "Permission" && x.Value == permission))
-                    await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
+                if (!allClaims.Any(x => x.Type == ClaimPermationTypes.Permations.ToString() && x.Value == permission))
+                    await roleManager.AddClaimAsync(role, new Claim(ClaimPermationTypes.Permations.ToString(), permission));
             }
         }
 

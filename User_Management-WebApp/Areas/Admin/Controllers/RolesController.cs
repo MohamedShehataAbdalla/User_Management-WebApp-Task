@@ -281,10 +281,10 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
             foreach (var claim in model.RoleCalims!)
             {
                 if (roleClaims.Any(x => x.Value == claim.DisplayValue) && !claim.IsSelected)
-                    await _roleManager.RemoveClaimAsync(role, new Claim(Constants.ClaimTypes.Permations.ToString(), claim.DisplayValue));
+                    await _roleManager.RemoveClaimAsync(role, new Claim(Constants.ClaimPermationTypes.Permations.ToString(), claim.DisplayValue));
 
                 if (!roleClaims.Any(x => x.Value == claim.DisplayValue) && claim.IsSelected)
-                    await _roleManager.AddClaimAsync(role, new Claim(Constants.ClaimTypes.Permations.ToString(), claim.DisplayValue));
+                    await _roleManager.AddClaimAsync(role, new Claim(Constants.ClaimPermationTypes.Permations.ToString(), claim.DisplayValue));
             }
 
 

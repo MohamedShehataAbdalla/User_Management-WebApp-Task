@@ -2,7 +2,7 @@
 
 namespace User_Management_WebApp.Constants
 {
-    public enum ClaimTypes
+    public enum ClaimPermationTypes
     {
         Permations,
     }

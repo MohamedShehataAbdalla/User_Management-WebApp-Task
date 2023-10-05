@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace User_Management_WebApp.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

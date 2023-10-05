@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
+    [AllowAnonymous]
     public class AccountsController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -25,8 +27,6 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
         {
             return View();
         }
-
-
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
