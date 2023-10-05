@@ -23,6 +23,7 @@ using User_Management_WebApp.Models;
 
 namespace User_Management_WebApp.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
