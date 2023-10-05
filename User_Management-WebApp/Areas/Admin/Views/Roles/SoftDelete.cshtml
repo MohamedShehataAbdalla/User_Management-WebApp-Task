@@ -1,0 +1,43 @@
+﻿@model RoleViewModel
+
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="header-page">
+
+    <div class="row">
+        <div class="col-md-6 justify-content-between">
+            <h3><i class="fa-solid fa-shield-virus"></i> <span class="text-primary">Delete Role</span></h3>
+        </div>
+        <div class="col-md-6 text-end">
+        </div>
+    </div>
+    <hr />
+</div>
+
+<div class="content-page">
+    <h4>Are you sure you want to delete this?</h4>
+    <div>
+        <h5>Role Details</h5>
+        <hr />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" disabled />
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="SoftDelete">
+            <input type="hidden" asp-for="Id" />
+            <div class="button-group">
+                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-circle-xmark"></i> Soft Delete</button>
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-angle-left"></i> Back to List</a>
+            </div>
+        </form>
+    </div>
+
+</div>

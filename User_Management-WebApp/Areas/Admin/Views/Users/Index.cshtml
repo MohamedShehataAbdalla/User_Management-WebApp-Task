@@ -63,7 +63,7 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        @string.Join(" , ", item.RolesName.ToList())
+                        @string.Join(" , ", item.RolesName!.ToList())
                     </td>
                     <td>
                         @if (item.Image != null)

@@ -77,11 +77,11 @@ namespace User_Management_WebApp.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Bio")]
             [MaxLength(255)]
             [DataType(DataType.MultilineText)]
-            public string? Bio { get; set; }
+            public string Bio { get; set; } = null;
 
             [Display(Name = "Profile Image")]
             [DataType(DataType.Upload)]
-            public byte[]? Image { get; set; }
+            public byte[] Image { get; set; } = null;
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

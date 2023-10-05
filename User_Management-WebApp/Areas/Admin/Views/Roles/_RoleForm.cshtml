@@ -1,15 +1,30 @@
-﻿@model RoleViewModel
+﻿@model RoleFormViewModel
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form method="post" asp-action="Create">
-            <div class="input-group mb-3">
-                <input asp-for="Name" class="form-control" placeholder="Role name..." />
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Add New Role</button>
+            <div class="row">
+                <div class="col-md-6 w-100">
+                    <div class="input-group mb-3">
+                        <div class="btn-group" role="group">
+                            <input asp-for="Active" type="checkbox" class="btn-check" id="Active" checked>
+                            <label asp-for="Active" class="btn btn-outline-success" for="Active"></label>
+                        </div>
+                        <input asp-for="Name" class="form-control" placeholder="Role name..." />
+                        @if (Model.Id != null)
+                        {
+                            <button class="btn btn-warning" type="submit"><i class="fa-solid fa-pen-to-square"></i> Update Role</button>
+
+                        }else
+                        {
+                            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-circle-plus"></i> Create Role</button>
+
+                        }
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <span asp-validation-for="Active" class="text-danger"></span>
                 </div>
             </div>
-            <span asp-validation-for="Name" class="text-danger"></span>
         </form>
     </div>
 </div>

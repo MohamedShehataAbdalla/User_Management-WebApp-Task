@@ -11,7 +11,7 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         [Required]
         //[Display(Name = "Email or Username or Phone")]
         [Display(Name = "Email or Username")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -19,7 +19,7 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         /// </summary>
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

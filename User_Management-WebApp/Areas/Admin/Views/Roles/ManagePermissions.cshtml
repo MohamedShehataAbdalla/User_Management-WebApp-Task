@@ -1,0 +1,65 @@
+﻿@model RolePermissionsViewModel
+
+@{
+    ViewData["Title"] = "Permissions";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="header-page">
+
+    <div class="row">
+        <div class="col-md-6 justify-content-between">
+            <h3><i class="fa-solid fa-building-shield"></i> <span class="text-primary">Manage Role Permissions</span></h3>
+        </div>
+        <div class="col-md-6 text-end">
+        </div>
+    </div>
+    <hr />
+</div>
+
+
+<div class="content-page">
+    <form asp-action="ManagePermissions" method="post">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2>@Model.RoleName</h2>
+            </div>
+            <div class="card-body">
+                <input type="hidden" asp-for="RoleId" />
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Module</th>
+                            <th>Permission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.RoleCalims!.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="form-check m-1">
+                                        <input type="hidden" asp-for="@Model.RoleCalims[i].DisplayValue" />
+                                        <input asp-for="@Model.RoleCalims[i].IsSelected" class="form-check-input" />
+                                        @* <label class="form-check-label" asp-for="@Model.RoleCalims[i].IsSelected">
+                                            @Model.RoleCalims[i].DisplayValue
+                                        </label> *@
+                                    </div>
+                                </td>
+                                <td>@Model.RoleCalims[i].DisplayValue.Split('.')[1]</td>
+                                <td>@Model.RoleCalims[i].DisplayValue.Split('.')[2]</td>
+                            </tr>
+                            
+                        }
+                    </tbody>
+                </table>
+                <span asp-validation-summary="All" class="text-danger"></span>
+            </div>
+            <div class="card-footer button-group">
+                <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-angle-left"></i> Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>

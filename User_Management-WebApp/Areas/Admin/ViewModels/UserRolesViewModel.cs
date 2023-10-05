@@ -5,6 +5,6 @@
 
         public string UserId { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
-        public List<RoleListViewModel> Roles { get; set; }
+        public List<ListCheckBoxViewModel>? Roles { get; set; }
     }
 }

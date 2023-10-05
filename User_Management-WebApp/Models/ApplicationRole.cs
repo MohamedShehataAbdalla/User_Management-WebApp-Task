@@ -5,6 +5,14 @@ namespace User_Management_WebApp.Models
 {
     public class ApplicationRole : IdentityRole
     {
+        public ApplicationRole() : base()
+        {
+                
+        }
+
+        public ApplicationRole(string roleName) : base(roleName)
+        {
+        }
 
         [Display(Name = "Is Active")]
         public bool Active { get; set; }

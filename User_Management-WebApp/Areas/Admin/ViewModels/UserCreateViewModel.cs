@@ -64,7 +64,7 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         [Display(Name = "Is Active")]
         public bool Active { get; set; }
 
-        public List<RoleListViewModel> Roles { get; set; }
+        public List<ListCheckBoxViewModel>? Roles { get; set; }
 
     }
 }

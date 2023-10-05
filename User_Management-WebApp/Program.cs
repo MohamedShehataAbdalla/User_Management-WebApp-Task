@@ -16,7 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders().AddDefaultUI();
 
 builder.Services.AddControllersWithViews();
 
@@ -67,7 +67,8 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-//app.RunWithSeedData();
+// Seed Data
+app.RunWithSeedData();
 
 app.Run();
 

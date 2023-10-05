@@ -64,7 +64,7 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
         [Display(Name = "Is Active")]
         public bool Active { get; set; }
 
-        public IEnumerable<string> RolesName { get; set; }
+        public IEnumerable<string>? RolesName { get; set; }
 
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }

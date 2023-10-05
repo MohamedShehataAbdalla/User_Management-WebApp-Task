@@ -5,29 +5,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using User_Management_WebApp.Areas.Admin.ViewModels;
+using User_Management_WebApp.Constants;
 using User_Management_WebApp.Models;
 
 namespace User_Management_WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.SuperAdmin)]
     [Route("Admin/[controller]/[action]")]
     public class UsersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
         // GET: UsersController
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.Where(x => x.DeletedAt == null).ToListAsync();
 
-            var userViewModels = users.Select(user => new UserViewModel
+            var viewModel = users.Select(user => new UserViewModel
             {
                 Id = user.Id,
                 First_Name = user.First_Name,
@@ -43,14 +46,14 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 RolesName = _userManager.GetRolesAsync(user).Result,
             }).ToList();
 
-            return View(userViewModels);
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Archive()
         {
             var users = await _userManager.Users.Where(x => x.DeletedAt != null).ToListAsync();
 
-            var userViewModels = users.Select(user => new UserViewModel
+            var viewModel = users.Select(user => new UserViewModel
             {
                 Id = user.Id,
                 First_Name = user.First_Name,
@@ -67,7 +70,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 RolesName = _userManager.GetRolesAsync(user).Result,
             }).ToList();
 
-            return View(userViewModels);
+            return View(viewModel);
         }
 
         // GET: UsersController/Details/5
@@ -103,7 +106,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
         // GET: UsersController/Create
         public async Task<ActionResult> Create()
         {
-            var roles = await _roleManager.Roles.Select(r => new RoleListViewModel { RoleId = r.Id, RoleName = r.Name }).ToListAsync();
+            var roles = await _roleManager.Roles.Select(r => new ListCheckBoxViewModel { DisplayValue = r.Name! }).ToListAsync();
 
             var viewModel = new UserCreateViewModel
             {
@@ -123,7 +126,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 if (!ModelState.IsValid)
                     return View(model);
 
-                if (!model.Roles.Any(r => r.IsSelected))
+                if (!model.Roles!.Any(r => r.IsSelected))
                 {
                     ModelState.AddModelError("Roles", "Please select at least one role");
                     return View(model);
@@ -149,7 +152,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
 
                     var allowedExtentions = new List<string> { ".jpg", ".jpeg", ".png", ".webp", ".tiff", ".tif", ".bmp" };
 
-                    if (!allowedExtentions.Contains(Path.GetExtension(image.FileName.ToLower())))
+                    if (!allowedExtentions.Contains(Path.GetExtension(image!.FileName.ToLower())))
                     {
                         ModelState.AddModelError("Image", $"Only {string.Join(" ,", allowedExtentions)} are allowed!");
                         return View(model);
@@ -178,7 +181,8 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 user.DateOfBirth = model.DateOfBirth;
                 user.Bio = model.Bio;
                 user.Active = model.Active;
-                user.CreatedBy = User.Identity.Name;
+                user.CreatedBy = User.Identity!.Name;
+                user.EmailConfirmed = true;
 
 
 
@@ -193,7 +197,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                     return View(model);
                 }
 
-                await _userManager.AddToRolesAsync(user, model.Roles.Where(r => r.IsSelected).Select(r => r.RoleName));
+                await _userManager.AddToRolesAsync(user, model.Roles!.Where(r => r.IsSelected).Select(r => r.DisplayValue));
 
 
                 return RedirectToAction(nameof(Index));
@@ -219,10 +223,10 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
                 Id = id,
                 First_Name = user.First_Name,
                 Last_Name = user.Last_Name,
-                Email = user.Email,
-                UserName = user.UserName,
+                Email = user.Email!,
+                UserName = user.UserName!,
                 PhoneNumber = user.PhoneNumber,
-                DateOfBirth = (DateOnly)user.DateOfBirth,
+                DateOfBirth = (DateOnly)user.DateOfBirth!,
                 Gender = user.Gender,
                 Bio = user.Bio,
                 Image = user.Image,
@@ -266,7 +270,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
 
                     var allowedExtentions = new List<string> { ".jpg", ".jpeg", ".png", ".webp", ".tiff", ".tif", ".bmp" };
 
-                    if (!allowedExtentions.Contains(Path.GetExtension(image.FileName.ToLower())))
+                    if (!allowedExtentions.Contains(Path.GetExtension(image!.FileName.ToLower())))
                     {
                         ModelState.AddModelError("Image", $"Only {string.Join(" ,", allowedExtentions)} are allowed!");
                         return View(model);
@@ -447,7 +451,7 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
 
                 user.UpdatedAt = DateTime.Now;
 
-                _userManager.RemovePasswordAsync(user);
+                await _userManager.RemovePasswordAsync(user);
 
                 var result = await  _userManager.AddPasswordAsync(user, model.Password);
 
@@ -479,12 +483,11 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
             var viewModel = new UserRolesViewModel
             {
                 UserId = user.Id,
-                UserName = user.UserName,
-                Roles = roles.Select(role => new RoleListViewModel
+                UserName = user.UserName!,
+                Roles = roles.Select(role => new ListCheckBoxViewModel
                 {
-                    RoleId = role.Id,
-                    RoleName = role.Name,
-                    IsSelected = _userManager.IsInRoleAsync(user, role.Name).Result,
+                    DisplayValue = role.Name!,
+                    IsSelected = _userManager.IsInRoleAsync(user, role.Name!).Result,
                 }).ToList(),
             };
 
@@ -501,14 +504,17 @@ namespace User_Management_WebApp.Areas.Admin.Controllers
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            foreach (var role in model.Roles)
-            {
-                if (userRoles.Any(x => x == role.RoleName) && !role.IsSelected)
-                    await _userManager.RemoveFromRoleAsync(user, role.RoleName);
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+            await _userManager.AddToRolesAsync(user, model.Roles!.Where(r => r.IsSelected).Select(r => r.DisplayValue));
 
-                if (!userRoles.Any(x => x == role.RoleName) && role.IsSelected)
-                    await _userManager.AddToRoleAsync(user, role.RoleName);
-            }
+            //foreach (var role in model.Roles)
+            //{
+            //    if (userRoles.Any(x => x == role.DisplayValue) && !role.IsSelected)
+            //        await _userManager.RemoveFromRoleAsync(user, role.DisplayValue);
+
+            //    if (!userRoles.Any(x => x == role.DisplayValue) && role.IsSelected)
+            //        await _userManager.AddToRoleAsync(user, role.DisplayValue);
+            //}
 
             user.UpdatedAt = DateTime.Now;
 

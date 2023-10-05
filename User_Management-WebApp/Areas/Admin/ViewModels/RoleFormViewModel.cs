@@ -2,7 +2,7 @@
 
 namespace User_Management_WebApp.Areas.Admin.ViewModels
 {
-    public class RoleViewModel
+    public class RoleFormViewModel
     {
         [Display(Name = "Id")]
         public string Id { get; set; } = string.Empty;
@@ -14,11 +14,5 @@ namespace User_Management_WebApp.Areas.Admin.ViewModels
 
         [Display(Name = "Is Active")]
         public bool Active { get; set; }
-
-        public string? CreatedBy { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
-
     }
 }
