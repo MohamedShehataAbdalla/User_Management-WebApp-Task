@@ -21,28 +21,59 @@
                     <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
                     <label asp-for="Input.Password" class="form-label">Password</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    
                 </div>
                 <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <a id="forgot-password" asp-page="./ForgotPassword" class="text-decoration-none">Forgot Password?</a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
+                <div class="text-center">
+                    <button id="login-submit" type="submit" class="w-75 btn btn-lg btn-primary">Log in</button>
                 </div>
             </form>
+            <div class="mt-4 mb-4 text-center">
+                @if ((Model.ExternalLogins?.Count ?? 0) != 0)
+                {
+                    <h6 class="text-center w-100">Or Login Using</h6>
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        @foreach (var provider in Model.ExternalLogins)
+                        {
+                            <div class="mt-2 mb-2  d-inline-block">
+                                <button type="submit" class="btn btn-light d-inline-block" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                    @{
+                                        string imageSrc = string.Empty;
+                                        if (provider.DisplayName == "Google")
+                                            imageSrc = "https://www.pngmart.com/files/23/Google-Logo-PNG-HD-1.png";
+                                        else if (provider.DisplayName == "Facebook")
+                                            imageSrc = "https://cdn.freebiesupply.com/logos/large/2x/facebook-3-logo-png-transparent.png";
+                                        else if (provider.DisplayName == "Microsoft")
+                                            imageSrc = "https://freepngimg.com/thumb/microsoft/28525-5-microsoft-logo-clipart.png";
+                                    }
+                                    <img src="@imageSrc" alt="@provider.DisplayName" style="height: 20px;" />
+                                     @provider.DisplayName
+                                </button>
+                            </div>
+                        }
+                    </form>
+                }
+            </div>
+            <div class="text-center">
+                <p>
+                    Don't have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none">Sign Up</a>
+                </p>
+                <p>
+                    Resend email <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="text-decoration-none">Confirmation</a>
+                </p>
+            </div>
         </section>
     </div>
 </div>

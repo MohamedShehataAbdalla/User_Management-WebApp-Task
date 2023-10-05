@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using User_Management_WebApp.Services;
 using User_Management_WebApp.Filters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,21 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => option
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddAuthentication()
+    .AddGoogle(options => {
+        IConfigurationSection googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+        options.ClientId = googleAuthSection["ClientId"];
+        options.ClientSecret = googleAuthSection["ClientSecret"];
+    })
+    .AddFacebook(facebookOptions => {
+        facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+        facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+    })
+    .AddMicrosoftAccount(microsoftOptions => {
+        microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
+        microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+    });
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
